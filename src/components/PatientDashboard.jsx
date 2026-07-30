@@ -67,6 +67,10 @@ export default function PatientDashboard() {
   const [allergies, setAllergies] = useState(['Penicillin', 'Peanuts']);
   const [chronicConditions, setChronicConditions] = useState(['Type 2 Diabetes', 'Hypertension']);
 
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [emailNotifs, setEmailNotifs] = useState(true);
+  const [smsNotifs, setSmsNotifs] = useState(true);
+  
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [chatMessages, setChatMessages] = useState([
@@ -823,27 +827,108 @@ export default function PatientDashboard() {
                   <h3><i className="bi bi-shield-lock"></i> Privacy & Security</h3>
                 </div>
                 <div className="settings-list">
-                  <div className="setting-item">
+                  <div className="setting-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h4>Two-Factor Authentication</h4>
-                      <p>Add an extra layer of security</p>
+                      <h4 style={{ margin: '0 0 4px' }}>Two-Factor Authentication (2FA)</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Add an extra layer of security</p>
                     </div>
-                    <button className="btn-outline">Enable</button>
+                    <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                      <input type="checkbox" checked={twoFactorEnabled} onChange={() => setTwoFactorEnabled(!twoFactorEnabled)} style={{ opacity: 0, width: 0, height: 0 }} />
+                      <span style={{
+                        position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: twoFactorEnabled ? '#184F76' : '#ccc', transition: '.4s', borderRadius: '34px'
+                      }}>
+                        <span style={{
+                          position: 'absolute', content: '""', height: '18px', width: '18px', left: '3px', bottom: '3px',
+                          backgroundColor: 'white', transition: '.4s', borderRadius: '50%',
+                          transform: twoFactorEnabled ? 'translateX(20px)' : 'translateX(0)'
+                        }}></span>
+                      </span>
+                    </label>
                   </div>
-                  <div className="setting-item">
+                  
+                  <div className="setting-item" style={{ marginTop: '16px' }}>
+                    <h4 style={{ margin: '0 0 10px' }}>Data Access Management</h4>
+                    <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <p style={{ margin: 0, fontWeight: 'bold', fontSize: '14px' }}>Dr. Sarah Smith (Apollo Hospital)</p>
+                        <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>Last accessed: Today, 10:00 AM</p>
+                      </div>
+                      <button onClick={() => alert("Access revoked for Dr. Sarah Smith.")} style={{ padding: '6px 12px', border: '1px solid #e74c3c', color: '#e74c3c', background: 'transparent', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>Revoke Access</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="dashboard-card" style={{ gridColumn: '1 / -1' }}>
+                <div className="card-header">
+                  <h3><i className="bi bi-bell"></i> Notification Preferences</h3>
+                </div>
+                <div className="settings-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <div className="setting-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h4>Change Password</h4>
-                      <p>Update your account password</p>
+                      <h4 style={{ margin: '0 0 4px' }}>Email Notifications</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Receive lab results and reports</p>
                     </div>
-                    <button className="btn-outline">Change</button>
+                    <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                      <input type="checkbox" checked={emailNotifs} onChange={() => setEmailNotifs(!emailNotifs)} style={{ opacity: 0, width: 0, height: 0 }} />
+                      <span style={{
+                        position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: emailNotifs ? '#184F76' : '#ccc', transition: '.4s', borderRadius: '34px'
+                      }}>
+                        <span style={{
+                          position: 'absolute', content: '""', height: '18px', width: '18px', left: '3px', bottom: '3px',
+                          backgroundColor: 'white', transition: '.4s', borderRadius: '50%',
+                          transform: emailNotifs ? 'translateX(20px)' : 'translateX(0)'
+                        }}></span>
+                      </span>
+                    </label>
                   </div>
-                  <div className="setting-item">
+                  
+                  <div className="setting-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h4>Data Sharing</h4>
-                      <p>Control who can access your records</p>
+                      <h4 style={{ margin: '0 0 4px' }}>SMS Reminders</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Get appointment reminders</p>
                     </div>
-                    <button className="btn-outline">Manage</button>
+                    <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                      <input type="checkbox" checked={smsNotifs} onChange={() => setSmsNotifs(!smsNotifs)} style={{ opacity: 0, width: 0, height: 0 }} />
+                      <span style={{
+                        position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: smsNotifs ? '#184F76' : '#ccc', transition: '.4s', borderRadius: '34px'
+                      }}>
+                        <span style={{
+                          position: 'absolute', content: '""', height: '18px', width: '18px', left: '3px', bottom: '3px',
+                          backgroundColor: 'white', transition: '.4s', borderRadius: '50%',
+                          transform: smsNotifs ? 'translateX(20px)' : 'translateX(0)'
+                        }}></span>
+                      </span>
+                    </label>
                   </div>
+                </div>
+              </div>
+
+              <div className="dashboard-card">
+                <div className="card-header">
+                  <h3><i className="bi bi-file-earmark-arrow-down"></i> Data Export</h3>
+                </div>
+                <div style={{ padding: '20px' }}>
+                  <p style={{ fontSize: '14px', color: '#555', marginBottom: '16px' }}>Download a complete PDF copy of all your medical history, prescriptions, and lab reports.</p>
+                  <button onClick={() => alert("Generating Medical History PDF... Download will start shortly.")} className="btn-primary" style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <i className="bi bi-download"></i> Download Medical Records
+                  </button>
+                </div>
+              </div>
+
+              <div className="dashboard-card">
+                <div className="card-header">
+                  <h3><i className="bi bi-telephone-plus"></i> Emergency Contacts (ICE)</h3>
+                </div>
+                <div style={{ padding: '20px' }}>
+                  <div style={{ background: '#fff', border: '1px solid #eee', padding: '12px', borderRadius: '8px', marginBottom: '12px' }}>
+                    <p style={{ margin: 0, fontWeight: 'bold', fontSize: '14px' }}>Rahul Sharma (Brother)</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#666' }}>+91 98765 12345</p>
+                  </div>
+                  <button onClick={() => alert("Add emergency contact modal opened")} className="btn-outline" style={{ width: '100%' }}>+ Add New Contact</button>
                 </div>
               </div>
             </div>

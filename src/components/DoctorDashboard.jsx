@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './DoctorDashboard.css';
+import QRScanner from './QRScanner';
 
 export default function DoctorDashboard() {
   const navigate = useNavigate();
@@ -217,9 +218,17 @@ export default function DoctorDashboard() {
   ];
 
   // Recent Consultations (fetched from API)
-  
   const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showQrScanner, setShowQrScanner] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+  
+  // Doctor Settings State
+  const [acceptingPatients, setAcceptingPatients] = useState(true);
+  const [autoScheduling, setAutoScheduling] = useState(false);
+  const [emailNotifs, setEmailNotifs] = useState(true);
+  const [smsNotifs, setSmsNotifs] = useState(true);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   
   const [chatMessages, setChatMessages] = useState([
     { id: 1, sender: 'patient', text: 'Doctor, my blood pressure reading this morning was 130/85. Is that okay?', time: '08:45 AM' },
@@ -249,6 +258,25 @@ export default function DoctorDashboard() {
         text: 'Thank you doctor, I will update you tomorrow.',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
+    }, 1500);
+  };
+
+  const startSimulatedScan = () => {
+    setShowQrScanner(true);
+    setIsScanning(true);
+  };
+
+  const handleQRScanSuccess = (decodedText) => {
+    // If you scanned a real ID from the QR code, you would search for it here.
+    // For demo purposes, we will simply say it was successful and select the first patient
+    setIsScanning(false);
+    
+    // Show success for a brief moment before closing
+    setTimeout(() => {
+      setShowQrScanner(false);
+      // You can match the decodedText to a patient here, 
+      // e.g., const foundPatient = linkedPatients.find(p => p.Id === decodedText);
+      handleSelectPatient(linkedPatients[0]); 
     }, 1500);
   };
   // Dashboard Stats
@@ -435,6 +463,9 @@ export default function DoctorDashboard() {
             <p className="topbar-subtitle">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
           <div className="topbar-actions" style={{ position: 'relative' }}>
+            <button className="icon-btn" onClick={startSimulatedScan} title="Scan Patient QR">
+              <i className="bi bi-qr-code-scan"></i>
+            </button>
             <button className="icon-btn" onClick={() => setShowNotifications(!showNotifications)}>
               <i className="bi bi-bell-fill"></i>
               <span className="badge">3</span>
@@ -832,14 +863,133 @@ export default function DoctorDashboard() {
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (
-            <div className="dashboard-card">
-              <div className="card-header">
-                <h3><i className="bi bi-gear-fill"></i> Settings</h3>
-              </div>
-              <div className="coming-soon">
-                <i className="bi bi-gear-fill" style={{ fontSize: '80px', color: '#CDEDB3' }}></i>
-                <h3>Settings</h3>
-                <p>Manage your account preferences, notifications, and privacy settings.</p>
+            <div className="dashboard-main-content">
+              <div className="settings-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+                
+                {/* Clinic Profile */}
+                <div className="dashboard-card" style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                  <div className="card-header" style={{ marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '12px' }}>
+                    <h3 style={{ margin: 0, color: '#1B4D1A', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}><i className="bi bi-hospital"></i> Clinic Profile</h3>
+                  </div>
+                  <div className="settings-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#666', fontWeight: 600 }}>Hospital/Clinic Name</label>
+                      <input type="text" defaultValue={doctorInfo.hospital} style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#666', fontWeight: 600 }}>Specialization</label>
+                      <input type="text" defaultValue={doctorInfo.specialization} style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' }} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', color: '#666', fontWeight: 600 }}>Contact Email</label>
+                      <input type="email" defaultValue={doctorInfo.email} style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' }} />
+                    </div>
+                    <button className="btn-primary" onClick={() => alert('Profile Updated!')} style={{ marginTop: '8px', padding: '12px', background: '#1B4D1A', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>Save Changes</button>
+                  </div>
+                </div>
+
+                {/* Schedule & Availability */}
+                <div className="dashboard-card" style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                  <div className="card-header" style={{ marginBottom: '20px', borderBottom: '1px solid #eee', paddingBottom: '12px' }}>
+                    <h3 style={{ margin: 0, color: '#1B4D1A', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}><i className="bi bi-calendar-week"></i> Schedule & Availability</h3>
+                  </div>
+                  <div className="settings-list" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>Accepting New Patients</h4>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Allow new patients to request consults</p>
+                      </div>
+                      <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                        <input type="checkbox" checked={acceptingPatients} onChange={() => setAcceptingPatients(!acceptingPatients)} style={{ opacity: 0, width: 0, height: 0 }} />
+                        <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: acceptingPatients ? '#1B4D1A' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+                          <span style={{ position: 'absolute', height: '18px', width: '18px', left: '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%', transform: acceptingPatients ? 'translateX(20px)' : 'translateX(0)' }}></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>Auto-Approve Appointments</h4>
+                        <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Automatically accept requests within hours</p>
+                      </div>
+                      <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                        <input type="checkbox" checked={autoScheduling} onChange={() => setAutoScheduling(!autoScheduling)} style={{ opacity: 0, width: 0, height: 0 }} />
+                        <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: autoScheduling ? '#1B4D1A' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+                          <span style={{ position: 'absolute', height: '18px', width: '18px', left: '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%', transform: autoScheduling ? 'translateX(20px)' : 'translateX(0)' }}></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style={{ marginTop: '10px' }}>
+                      <h4 style={{ margin: '0 0 8px', fontSize: '14px', color: '#666' }}>Working Hours</h4>
+                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <input type="time" defaultValue="09:00" style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '6px' }} />
+                        <span>to</span>
+                        <input type="time" defaultValue="17:00" style={{ padding: '8px 12px', border: '1px solid #ddd', borderRadius: '6px' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notifications & Security */}
+                <div className="dashboard-card" style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', gridColumn: '1 / -1', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
+                  
+                  {/* Notifications */}
+                  <div>
+                    <h3 style={{ margin: '0 0 20px', color: '#1B4D1A', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #eee', paddingBottom: '12px' }}><i className="bi bi-bell"></i> Notifications</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>Email Alerts</h4>
+                          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Get notified of new lab reports</p>
+                        </div>
+                        <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                          <input type="checkbox" checked={emailNotifs} onChange={() => setEmailNotifs(!emailNotifs)} style={{ opacity: 0, width: 0, height: 0 }} />
+                          <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: emailNotifs ? '#1B4D1A' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+                            <span style={{ position: 'absolute', height: '18px', width: '18px', left: '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%', transform: emailNotifs ? 'translateX(20px)' : 'translateX(0)' }}></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>SMS Alerts</h4>
+                          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Get notified for emergency consults</p>
+                        </div>
+                        <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                          <input type="checkbox" checked={smsNotifs} onChange={() => setSmsNotifs(!smsNotifs)} style={{ opacity: 0, width: 0, height: 0 }} />
+                          <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: smsNotifs ? '#1B4D1A' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+                            <span style={{ position: 'absolute', height: '18px', width: '18px', left: '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%', transform: smsNotifs ? 'translateX(20px)' : 'translateX(0)' }}></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Security */}
+                  <div>
+                    <h3 style={{ margin: '0 0 20px', color: '#1B4D1A', fontSize: '18px', display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid #eee', paddingBottom: '12px' }}><i className="bi bi-shield-lock"></i> Security</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>Two-Factor Authentication</h4>
+                          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Mandatory for accessing health records</p>
+                        </div>
+                        <label className="toggle-switch" style={{ position: 'relative', display: 'inline-block', width: '44px', height: '24px' }}>
+                          <input type="checkbox" checked={twoFactorEnabled} onChange={() => setTwoFactorEnabled(!twoFactorEnabled)} style={{ opacity: 0, width: 0, height: 0 }} />
+                          <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: twoFactorEnabled ? '#1B4D1A' : '#ccc', transition: '.4s', borderRadius: '34px' }}>
+                            <span style={{ position: 'absolute', height: '18px', width: '18px', left: '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%', transform: twoFactorEnabled ? 'translateX(20px)' : 'translateX(0)' }}></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 4px', fontSize: '15px' }}>Manage API Access</h4>
+                          <p style={{ margin: 0, fontSize: '13px', color: '#666' }}>Integrate with hospital EHR systems</p>
+                        </div>
+                        <button onClick={() => alert("API Keys manager opened.")} style={{ padding: '6px 14px', border: '1px solid #1B4D1A', color: '#1B4D1A', background: 'transparent', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>Manage</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
           )}
@@ -1255,6 +1405,51 @@ export default function DoctorDashboard() {
               <i className="bi bi-send-fill"></i>
             </button>
           </form>
+        </div>
+      )}
+
+      {/* QR Scanner Modal Overlay */}
+      {showQrScanner && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center',
+          justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(4px)'
+        }}>
+          <div style={{
+            background: '#fff', padding: '30px', borderRadius: '16px', width: '400px',
+            textAlign: 'center', boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
+          }}>
+            <h3 style={{ margin: '0 0 20px', color: '#1B4D1A' }}>Scan Patient QR</h3>
+            
+            <div style={{
+              width: '100%', minHeight: '250px', margin: '0 auto 20px',
+              position: 'relative', overflow: 'hidden', backgroundColor: '#f8fafc',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              {isScanning ? (
+                <QRScanner onScanSuccess={handleQRScanSuccess} />
+              ) : (
+                <div style={{ color: '#2ecc71', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <i className="bi bi-check-circle-fill" style={{ fontSize: '48px', marginBottom: '10px' }}></i>
+                  <p style={{ margin: 0, fontWeight: 'bold' }}>Scan Successful!</p>
+                </div>
+              )}
+            </div>
+
+            <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>
+              {isScanning ? "Please grant camera access to scan patient QR code..." : "Redirecting to patient profile..."}
+            </p>
+            
+            <button 
+              onClick={() => { setShowQrScanner(false); setIsScanning(false); }}
+              style={{
+                padding: '10px 24px', background: '#f1f5f9', border: 'none',
+                borderRadius: '8px', color: '#475569', fontWeight: 'bold', cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
     </div>
