@@ -1,4 +1,4 @@
-﻿/* ===== READABILITY-OPTIMIZED HEALTHCARE PLATFORM ===== */
+/* ===== READABILITY-OPTIMIZED HEALTHCARE PLATFORM ===== */
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -433,7 +433,16 @@ body {
   align-items: center;
   justify-content: center;
   padding: 160px 80px 140px;
-  background: linear-gradient(160deg, #F5EEDD 0%, #EAF3F9 60%, #C4DCF0 100%);
+  
+  /* Mesmerizing Balanced Fade Background */
+  background-image: 
+    linear-gradient(100deg, #F5EEDD 0%, rgba(245, 238, 221, 0.95) 45%, rgba(245, 238, 221, 0.3) 75%, transparent 100%),
+    url('../assets/doctor-main.jpg');
+  background-position: center right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #F5EEDD;
+  
   position: relative;
   overflow: hidden;
 }
@@ -469,10 +478,16 @@ body {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
+  display: flex; /* Changed from grid so hero-content can naturally constrain */
   align-items: center;
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 600px; /* Constrain text to the left side */
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 .hero-left {
@@ -1639,10 +1654,21 @@ body {
 /* Hero Section Redesign */
 .hero-section {
   min-height: 90vh;
-  padding: 140px 60px 120px;
-  background: radial-gradient(circle at 20% 20%, rgba(132, 179, 206, 0.12) 0, rgba(132, 179, 206, 0.02) 36%, transparent 48%),
-              radial-gradient(circle at 80% 10%, rgba(22, 88, 123, 0.08) 0, rgba(22, 88, 123, 0.02) 42%, transparent 56%),
-              var(--bg-primary);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 160px 80px 140px;
+  
+  /* Mesmerizing Balanced Fade Background */
+  background-image: 
+    linear-gradient(rgba(245, 238, 221, 0.75), rgba(245, 238, 221, 0.75)),
+    url('../assets/image.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #F5EEDD;
+  
   position: relative;
   overflow: hidden;
 }
@@ -1659,10 +1685,12 @@ body {
   background-size: 48px 48px;
   mix-blend-mode: multiply;
   pointer-events: none;
+  z-index: 0;
 }
 
 .hero-container {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -1670,6 +1698,7 @@ body {
   align-items: center;
   text-align: center;
   padding: 40px 20px;
+  z-index: 1;
 }
 
 .hero-content {
@@ -1677,7 +1706,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1000px;
+  text-align: center;
+  max-width: 800px;
 }
 
 .hero-badge {

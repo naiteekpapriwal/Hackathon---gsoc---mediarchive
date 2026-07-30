@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './components/HomePage';
+import AboutUHI from './components/AboutUHI';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import PatientDashboard from './components/PatientDashboard';
@@ -14,6 +15,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about-uhi" element={<AboutUHI />} />
           <Route path="/login/patient" element={<LoginPage userType="patient" />} />
           <Route path="/login/doctor" element={<LoginPage userType="doctor" />} />
           <Route path="/register/patient" element={<RegisterPage userType="patient" />} />

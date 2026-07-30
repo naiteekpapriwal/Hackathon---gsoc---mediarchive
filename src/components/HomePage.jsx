@@ -36,15 +36,13 @@ const HomePage = () => {
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-container">
-          <a href="/" className="nav-logo">
+          <Link to="/" className="nav-logo">
             <i className="bi bi-heart-pulse-fill logo-icon"></i>
             <span className="logo-text">MediVerse</span>
-          </a>
+          </Link>
           <div className="nav-links">
-            <a href="#vision">Vision</a>
-            <a href="#services">Services</a>
-            <a href="#how-it-works">How It Works</a>
-            <a href="#faq">FAQ</a>
+            <Link to="/">Home</Link>
+            <Link to="/about-uhi">About UHI</Link>
           </div>
           <div className="nav-actions">
             <Link to="/login/patient" className="nav-cta-btn">Patient Login</Link>
@@ -62,7 +60,7 @@ const HomePage = () => {
               <span>Digital Health Records</span>
             </div>
             <h1 className="hero-title">
-              One Digital Health Record for <span className="highlight">Every Indian</span>
+              One Digital Health Record for <span className="highlight" style={{textShadow: "0 4px 24px rgba(132, 179, 206, 0.4)"}}>Every Indian</span>
             </h1>
             <p className="hero-description">
               MediVerse links patients, doctors, labs and hospitals through a single, secure health ID so your care history is always available when it matters most.
@@ -78,200 +76,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Statistics Section */}
-      <section className="trust-stats">
-        <div className="stats-container">
-          <div className="stat-card scroll-animate">
-            <div className="stat-icon">
-              <i className="bi bi-wallet2"></i>
-            </div>
-            <div className="stat-number">50%</div>
-            <div className="stat-label">Out-of-Pocket Health Spending</div>
-            <p className="stat-description">Total health spending in India paid by patients directly, making every repeated test costly</p>
-          </div>
-          <div className="stat-card scroll-animate">
-            <div className="stat-icon">
-              <i className="bi bi-hospital"></i>
-            </div>
-            <div className="stat-number">35%</div>
-            <div className="stat-label">Hospitals with EMR</div>
-            <p className="stat-description">Approximate share of Indian hospitals using electronic records today</p>
-          </div>
-          <div className="stat-card scroll-animate">
-            <div className="stat-icon">
-              <i className="bi bi-database-check"></i>
-            </div>
-            <div className="stat-number">42 Cr+</div>
-            <div className="stat-label"> Records Created</div>
-            <p className="stat-description">Health records linked under Ayushman Bharat Digital Mission</p>
-          </div>
-        </div>
-      </section>
 
-      {/* Vision Section */}
-      <section id="vision" className="vision-section">
-        <div className="section-container">
-          <h2 className="section-title scroll-animate">Our Vision</h2>
-          <p className="section-subtitle scroll-animate">
-            To make high-quality, data-driven healthcare accessible to every Indian by giving patients lifetime control over their medical records
-          </p>
-          <div className="vision-grid">
-            <div className="vision-card scroll-animate">
-              <div className="vision-icon"><i className="bi bi-person-fill"></i></div>
-              <h3>Patient First</h3>
-              <p>Every design choice starts with patient safety, consent, and clarity</p>
-            </div>
-            <div className="vision-card scroll-animate">
-              <div className="vision-icon"><i className="bi bi-diagram-3-fill"></i></div>
-              <h3>Connected Care</h3>
-              <p>Break silos between clinics, hospitals, labs and telemedicine platforms</p>
-            </div>
-            <div className="vision-card scroll-animate">
-              <div className="vision-icon"><i className="bi bi-shield-fill-check"></i></div>
-              <h3>Secure by Design</h3>
-              <p>Modern encryption with fine-grained access controls for Indian regulations</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="services-modern-section">
-        <div className="section-container">
-          <div className="section-header-centered">
-            <span className="section-label">Our Services</span>
-            <h2 className="section-title-large">Comprehensive Digital Health Solutions</h2>
-            <p className="section-description">
-              Designed for Indian healthcare to make medical records accessible and secure
-            </p>
-          </div>
-          <div className="services-grid-cards">
-            <div className="service-card-white scroll-animate">
-              <div className="service-icon-box">
-                <i className="bi bi-file-medical-fill"></i>
-              </div>
-              <h3>Unified Records</h3>
-              <p>All your medical history, lab reports, prescriptions and imaging in one secure digital location</p>
-              <span className="service-arrow">
-                <i className="bi bi-arrow-right"></i>
-              </span>
-            </div>
-            <div className="service-card-white scroll-animate">
-              <div className="service-icon-box">
-                <i className="bi bi-share-fill"></i>
-              </div>
-              <h3>Secure Sharing</h3>
-              <p>Share records via QR code or OTP with time-bound access that you control completely</p>
-              <span className="service-arrow">
-                <i className="bi bi-arrow-right"></i>
-              </span>
-            </div>
-            <div className="service-card-white scroll-animate">
-              <div className="service-icon-box">
-                <i className="bi bi-people-fill"></i>
-              </div>
-              <h3>Doctor Collaboration</h3>
-              <p>Seamless communication between healthcare providers with complete patient consent</p>
-              <span className="service-arrow">
-                <i className="bi bi-arrow-right"></i>
-              </span>
-            </div>
-            <div className="service-card-white scroll-animate">
-              <div className="service-icon-box">
-                <i className="bi bi-phone-fill"></i>
-              </div>
-              <h3>Mobile & Web Access</h3>
-              <p>Access your records from any device, anywhere in India, with real-time updates</p>
-              <span className="service-arrow">
-                <i className="bi bi-arrow-right"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="how-it-works">
-        <div className="section-container">
-          <h2 className="section-title scroll-animate">How MediVerse Works</h2>
-          <p className="section-subtitle scroll-animate">
-            India is digitising fast, but records are still scattered. MediVerse gives you one place to see and share your history securely
-          </p>
-          <div className="steps-container">
-            <div className="step-card scroll-animate">
-              <div className="step-number">01</div>
-              <div className="step-icon"><i className="bi bi-card-heading"></i></div>
-              <h3>Create / Link Your </h3>
-              <p>Sign up with Aadhaar and link your Ayushman Bharat Health Account for a single longitudinal timeline</p>
-            </div>
-            <div className="step-card scroll-animate">
-              <div className="step-number">02</div>
-              <div className="step-icon"><i className="bi bi-hospital-fill"></i></div>
-              <h3>Connect Doctors & Hospitals</h3>
-              <p>Doctors request time-bound access using QR or OTP to see your full verified history</p>
-            </div>
-            <div className="step-card scroll-animate">
-              <div className="step-number">03</div>
-              <div className="step-icon"><i className="bi bi-graph-up-arrow"></i></div>
-              <h3>One Timeline, Smarter Decisions</h3>
-              <p>Every visit and report is added to your secure record, reducing repeated tests and costs</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section id="faq" className="faq-section">
-        <div className="section-container">
-          <h2 className="section-title scroll-animate">Frequently Asked Questions</h2>
-          <div className="faq-container">
-            <div className="faq-item scroll-animate">
-              <details open={activeIndex === 0} onClick={() => toggleFAQ(0)}>
-                <summary>Is my data secure?</summary>
-                <p>Yes. We use end-to-end encryption, patient-controlled access, and comply with Indian data protection standards. You decide who sees what and for how long.</p>
-              </details>
-            </div>
-            <div className="faq-item scroll-animate">
-              <details open={activeIndex === 1} onClick={() => toggleFAQ(1)}>
-                <summary>How do I link my existing hospital records?</summary>
-                <p>Connect your  during signup. Any hospital already sharing digital records to the Ayushman Bharat ecosystem will automatically appear in your timeline.</p>
-              </details>
-            </div>
-            <div className="faq-item scroll-animate">
-              <details open={activeIndex === 2} onClick={() => toggleFAQ(2)}>
-                <summary>Can I use this for emergency care?</summary>
-                <p>Absolutely. Generate an emergency QR code that gives 24-hour read access to any doctor without needing your phone or OTP.</p>
-              </details>
-            </div>
-            <div className="faq-item scroll-animate">
-              <details open={activeIndex === 3} onClick={() => toggleFAQ(3)}>
-                <summary>Does this work with my telemedicine app?</summary>
-                <p>Yes. We integrate with major telemedicine platforms and hospital EMR systems that support /ABDM standards.</p>
-              </details>
-            </div>
-            <div className="faq-item scroll-animate">
-              <details open={activeIndex === 4} onClick={() => toggleFAQ(4)}>
-                <summary>What if I forget my password?</summary>
-                <p>Use Aadhaar-based recovery or link your phone number for OTP reset. We never store your password in plain text.</p>
-              </details>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="cta-section">
-        <div className="cta-container scroll-animate">
-          <h2 className="cta-title">Ready to Secure Your Health Data?</h2>
-          <p className="cta-subtitle">
-            Join thousands of patients and doctors already using MediVerse to make healthcare simpler and safer
-          </p>
-          <div className="cta-buttons">
-            <Link to="/login/patient" className="btn-primary-large">Get Started as Patient</Link>
-            <Link to="/login/doctor" className="btn-secondary-large">For Doctors & Clinics</Link>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="footer">
@@ -283,15 +88,13 @@ const HomePage = () => {
             </div>
             <div className="footer-col">
               <h4>Patients</h4>
-              <a href="/patient/login">Login</a>
-              <a href="/"> Integration</a>
-              <a href="/emergency">Emergency Access</a>
+              <Link to="/login/patient">Login</Link>
+              <a href="#abha">ABHA Integration</a>
             </div>
             <div className="footer-col">
               <h4>Doctors</h4>
-              <a href="/doctor/login">Doctor Login</a>
-              <a href="/search">Patient Search</a>
-              <a href="/records">Add Records</a>
+              <Link to="/login/doctor">Doctor Login</Link>
+              <a href="#search">Patient Search</a>
             </div>
             <div className="footer-col">
               <h4>Contact</h4>
