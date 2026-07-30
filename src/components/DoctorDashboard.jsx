@@ -217,7 +217,40 @@ export default function DoctorDashboard() {
   ];
 
   // Recent Consultations (fetched from API)
+  
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+  
+  const [chatMessages, setChatMessages] = useState([
+    { id: 1, sender: 'patient', text: 'Doctor, my blood pressure reading this morning was 130/85. Is that okay?', time: '08:45 AM' },
+    { id: 2, sender: 'doctor', text: 'Yes, that is within the acceptable range for now. Keep monitoring it.', time: '09:10 AM' }
+  ]);
+  const [newChatMessage, setNewChatMessage] = useState('');
 
+  const handleSendChatMessage = (e) => {
+    e.preventDefault();
+    if (!newChatMessage.trim()) return;
+    
+    const newMsg = {
+      id: Date.now(),
+      sender: 'doctor',
+      text: newChatMessage.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    
+    setChatMessages([...chatMessages, newMsg]);
+    setNewChatMessage('');
+    
+    // Simulate patient reply after 1.5 seconds
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        sender: 'patient',
+        text: 'Thank you doctor, I will update you tomorrow.',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+    }, 1500);
+  };
   // Dashboard Stats
   const stats = [
     {
@@ -401,14 +434,41 @@ export default function DoctorDashboard() {
             </h1>
             <p className="topbar-subtitle">{new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
           </div>
-          <div className="topbar-actions">
-            <button className="icon-btn">
+          <div className="topbar-actions" style={{ position: 'relative' }}>
+            <button className="icon-btn" onClick={() => setShowNotifications(!showNotifications)}>
               <i className="bi bi-bell-fill"></i>
               <span className="badge">3</span>
             </button>
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => setShowChat(!showChat)}>
               <i className="bi bi-chat-dots-fill"></i>
             </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div style={{
+                position: 'absolute', top: '100%', right: '50px', width: '300px',
+                backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                zIndex: 1000, marginTop: '10px', overflow: 'hidden'
+              }}>
+                <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', background: '#f8fafc' }}>
+                  <h4 style={{ margin: 0, fontSize: '14px', color: '#1B4D1A' }}>Notifications</h4>
+                </div>
+                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f1f1f1', background: '#e8f4e9' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '500' }}>New Appointment Request</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>Aarav Sharma requested an appointment for 8/5/2026</p>
+                  </div>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f1f1f1' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '500' }}>Lab Results Available</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>Blood test results for Priya Patel are ready to review</p>
+                  </div>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f1f1f1' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '500' }}>Message from Dr. Gupta</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>Referred a new cardiac patient to your clinic</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -1127,6 +1187,74 @@ export default function DoctorDashboard() {
               <span style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>Verified Healthcare Professional · MediArchive Network</span>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Floating Chat Interface */}
+      {showChat && (
+        <div style={{
+          position: 'fixed', bottom: '24px', right: '24px', width: '350px',
+          height: '500px', backgroundColor: '#fff', borderRadius: '16px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.15)', display: 'flex',
+          flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
+          border: '1px solid #e0e0e0', fontFamily: "'Inter', sans-serif"
+        }}>
+          {/* Chat Header */}
+          <div style={{
+            background: 'linear-gradient(135deg, #1B4D1A 0%, #2E7D32 100%)',
+            padding: '16px', color: 'white', display: 'flex', justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+                <i className="bi bi-person-fill"></i>
+              </div>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>Aarav Sharma</h4>
+                <p style={{ margin: 0, fontSize: '12px', opacity: 0.8 }}>Online <span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#2ecc71', borderRadius: '50%', marginLeft: '4px' }}></span></p>
+              </div>
+            </div>
+            <button onClick={() => setShowChat(false)} style={{ background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer' }}>
+              &times;
+            </button>
+          </div>
+
+          {/* Chat Messages */}
+          <div style={{ flex: 1, padding: '16px', overflowY: 'auto', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {chatMessages.map((msg) => (
+              <div key={msg.id} style={{
+                display: 'flex', flexDirection: 'column',
+                alignItems: msg.sender === 'doctor' ? 'flex-end' : 'flex-start'
+              }}>
+                <div style={{
+                  maxWidth: '80%', padding: '10px 14px', borderRadius: '12px',
+                  backgroundColor: msg.sender === 'doctor' ? '#1B4D1A' : '#fff',
+                  color: msg.sender === 'doctor' ? '#fff' : '#333',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.05)', fontSize: '14px', lineHeight: 1.4,
+                  borderBottomRightRadius: msg.sender === 'doctor' ? '2px' : '12px',
+                  borderBottomLeftRadius: msg.sender === 'patient' ? '2px' : '12px',
+                  border: msg.sender === 'patient' ? '1px solid #e2e8f0' : 'none'
+                }}>
+                  {msg.text}
+                </div>
+                <span style={{ fontSize: '10px', color: '#888', marginTop: '4px' }}>{msg.time}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input */}
+          <form onSubmit={handleSendChatMessage} style={{ padding: '14px', backgroundColor: '#fff', borderTop: '1px solid #eee', display: 'flex', gap: '8px' }}>
+            <input 
+              type="text" 
+              value={newChatMessage}
+              onChange={(e) => setNewChatMessage(e.target.value)}
+              placeholder="Type a reply..."
+              style={{ flex: 1, padding: '10px 14px', borderRadius: '20px', border: '1px solid #ddd', outline: 'none', fontSize: '14px' }}
+            />
+            <button type="submit" style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'none', backgroundColor: '#1B4D1A', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <i className="bi bi-send-fill"></i>
+            </button>
+          </form>
         </div>
       )}
     </div>

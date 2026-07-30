@@ -67,6 +67,7 @@ export default function PatientDashboard() {
   const [allergies, setAllergies] = useState(['Penicillin', 'Peanuts']);
   const [chronicConditions, setChronicConditions] = useState(['Type 2 Diabetes', 'Hypertension']);
 
+  const [showNotifications, setShowNotifications] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { id: 1, sender: 'doctor', text: 'Hello! How are you feeling today?', time: '09:00 AM' },
@@ -363,14 +364,37 @@ export default function PatientDashboard() {
             <h1>{patientInfo.name}</h1>
             <p className="topbar-subtitle">How are you feeling today?</p>
           </div>
-          <div className="topbar-actions">
-            <button className="icon-btn" onClick={() => setActiveTab('notifications')}>
+          <div className="topbar-actions" style={{ position: 'relative' }}>
+            <button className="icon-btn" onClick={() => setShowNotifications(!showNotifications)}>
               <i className="bi bi-bell-fill"></i>
               <span className="badge">2</span>
             </button>
             <button className="icon-btn" onClick={() => setShowChat(!showChat)}>
               <i className="bi bi-chat-dots-fill"></i>
             </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <div style={{
+                position: 'absolute', top: '100%', right: '50px', width: '300px',
+                backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                zIndex: 1000, marginTop: '10px', overflow: 'hidden'
+              }}>
+                <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', background: '#f8fafc' }}>
+                  <h4 style={{ margin: 0, fontSize: '14px', color: '#184F76' }}>Notifications</h4>
+                </div>
+                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f1f1f1', background: '#eaf4fc' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '500' }}>Upcoming Appointment</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>Reminder: Consultation with Dr. Smith tomorrow at 10:00 AM</p>
+                  </div>
+                  <div style={{ padding: '12px 16px', borderBottom: '1px solid #f1f1f1' }}>
+                    <p style={{ margin: 0, fontSize: '13px', fontWeight: '500' }}>Lab Results Available</p>
+                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#666' }}>Your recent blood test results are ready to review</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
