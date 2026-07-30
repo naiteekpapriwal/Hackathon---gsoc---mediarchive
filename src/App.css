@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  line-height: 1.6;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Headings and buttons use the display font */
+h1, h2, h3, h4, h5, h6,
+button, .btn, .btn-primary, .btn-secondary,
+.nav-cta-btn, .nav-cta-btn-secondary,
+.btn-primary-large, .btn-secondary-large {
+  font-family: var(--font-buttons);
+}
+
+:root {
+  /* ===== MEDIARCHIVE — VENICE BLUE PALETTE ===== */
+
+  /* Core Brand Colors */
+  --venice-blue:   #16587B;   /* Deep navy-teal — primary brand */
+  --rock-blue:     #84B3CE;   /* Soft aqua-blue — accent / highlights */
+  --merino:        #F5EEDD;   /* Warm off-white — primary background */
+  --white:         #FFFFFF;   /* Pure white — card surfaces */
+
+  /* Derived Semantic Colors */
+  --venice-dark:   #0E3F58;   /* Darker shade of Venice Blue (hover states) */
+  --rock-light:    #C4DCF0;   /* Very light blue — subtle backgrounds */
+  --rock-muted:    #5A8EAD;   /* Mid-tone — muted text on light bg */
+  --danger-red:    #C62828;   /* Allergy / critical alerts */
+  --danger-light:  #FFEBEE;   /* Danger background */
+  --warning-amber: #E65100;   /* Warnings */
+  --warning-light: #FFF3E0;   /* Warning background */
+  --success-green: #2E7D32;   /* Success states */
+  --success-light: #E8F5E9;   /* Success background */
+
+  /* ===== TEXT COLORS ===== */
+  --text-primary:   var(--venice-blue);   /* Main text */
+  --text-secondary: var(--rock-muted);    /* Secondary / muted text */
+  --text-inverse:   var(--merino);        /* Text on dark backgrounds */
+  --text-muted:     #7A9BB5;             /* Muted labels */
+
+  /* ===== BACKGROUND COLORS ===== */
+  --bg-primary:   var(--merino);          /* Page background */
+  --bg-secondary: var(--rock-light);      /* Alt sections */
+  --bg-dark:      var(--venice-blue);     /* Dark sections / sidebar */
+  --bg-accent:    var(--rock-blue);       /* Accent blocks */
+  --bg-white:     var(--white);          /* Card surfaces */
+
+  /* ===== INTERACTIVE ELEMENTS ===== */
+  --btn-primary-bg:    var(--venice-blue);
+  --btn-primary-text:  var(--merino);
+  --btn-primary-hover: var(--venice-dark);
+
+  --btn-secondary-bg:    transparent;
+  --btn-secondary-text:  var(--venice-blue);
+  --btn-secondary-hover: var(--rock-light);
+
+  --link-color:   var(--venice-blue);
+  --link-hover:   var(--rock-muted);
+
+  /* ===== BORDERS ===== */
+  --border-light:  rgba(22, 88, 123, 0.12);
+  --border-medium: rgba(22, 88, 123, 0.30);
+  --border-dark:   var(--venice-blue);
+
+  /* ===== SHADOWS ===== */
+  --shadow-xs:     0 1px 4px rgba(22, 88, 123, 0.08);
+  --shadow-sm:     0 2px 8px rgba(22, 88, 123, 0.10);
+  --shadow-md:     0 4px 20px rgba(22, 88, 123, 0.14);
+  --shadow-lg:     0 8px 40px rgba(22, 88, 123, 0.18);
+  --shadow-focus:  0 0 0 3px rgba(132, 179, 206, 0.45);
+
+  /* ===== BORDER RADIUS ===== */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-full: 9999px;
+
+  /* ===== LEGACY COMPATIBILITY (mapped to new palette) ===== */
+  --primary-color:      var(--venice-blue);
+  --primary-dark:       var(--venice-dark);
+  --primary-light:      var(--rock-blue);
+  --color-primary:      var(--venice-blue);
+  --color-accent:       var(--venice-blue);
+  --color-accent-light: var(--rock-blue);
+  --color-white:        var(--merino);
+  --color-bg:           var(--merino);
+  --bg-light:           var(--merino);
+  --bg-gray:            var(--rock-light);
+  --text-dark:          var(--venice-blue);
+  --text-gray:          var(--rock-muted);
+  --text-light:         var(--merino);
+  --text-white:         var(--merino);
+  --border-color:       var(--border-light);
+
+  /* ===== TYPOGRAPHY ===== */
+  --font-display:  'Outfit', 'Inter', 'Segoe UI', sans-serif;
+  --font-heading:  'Outfit', 'Inter', 'Segoe UI', sans-serif;
+  --font-body:     'Inter', 'Segoe UI', sans-serif;
+  --font-buttons:  'Outfit', 'Inter', 'Segoe UI', sans-serif;
+
+  /* ===== ALERT SEMANTIC COLORS ===== */
+  --success-color:  var(--success-green);
+  --warning-color:  var(--warning-amber);
+  --error-color:    var(--danger-red);
+  --info-color:     var(--rock-blue);
+}
+
+.App {
+  min-height: 100vh;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--rock-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rock-blue);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rock-muted);
+}
+
+/* ===== ACCESSIBILITY & FOCUS ===== */
+:focus-visible {
+  outline: 3px solid var(--rock-blue);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--rock-blue);
+  outline-offset: 2px;
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+a, button, input, select {
+  transition: all 0.2s ease-in-out;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.text-primary   { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-inverse   { color: var(--text-inverse); }
+.text-muted     { color: var(--text-muted); }
+
+.bg-primary   { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+.bg-dark      { background-color: var(--bg-dark); }
+.bg-accent    { background-color: var(--bg-accent); }

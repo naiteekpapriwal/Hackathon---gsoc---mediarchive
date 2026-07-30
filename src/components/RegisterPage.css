@@ -1,0 +1,68 @@
+﻿.register-container {
+  min-height: 100vh;
+  background: #F5EEDD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.register-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(14, 46, 63, 0.1);
+}
+
+.register-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #0E2E3F;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.register-form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.register-form-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.register-error {
+  color: #d32f2f;
+  background: #fce4ec;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-link {
+  color: #16587B;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.login-link:hover {
+  color: #1a4f1a;
+}
+
+
