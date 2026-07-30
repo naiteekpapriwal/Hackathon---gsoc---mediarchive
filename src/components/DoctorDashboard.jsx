@@ -139,7 +139,7 @@ export default function DoctorDashboard() {
     name: storedUser.name || 'Dr. Anushka Bhatnagar',
     specialization: profile.specialization || 'Cardiologist',
     hospital: profile.hospital || 'Apollo Hospitals, Mumbai',
-    abhaId: profile.hprId || '78-9012-3456-7890',
+    Id: profile.hprId || '78-9012-3456-7890',
     phone: storedUser.phone || '+91 98765 43210',
     email: storedUser.email || 'anushka.bhatnagar@apollohospitals.com',
     experience: profile.experience || '15 years',
@@ -152,7 +152,7 @@ export default function DoctorDashboard() {
     {
       id: 1,
       name: 'Aarav Sharma',
-      abhaId: '12-3456-7890-1234',
+      Id: '12-3456-7890-1234',
       age: 45,
       gender: 'Male',
       bloodGroup: 'O+',
@@ -165,7 +165,7 @@ export default function DoctorDashboard() {
     {
       id: 2,
       name: 'Priya Patel',
-      abhaId: '12-3456-7890-5678',
+      Id: '12-3456-7890-5678',
       age: 32,
       gender: 'Female',
       bloodGroup: 'A+',
@@ -178,7 +178,7 @@ export default function DoctorDashboard() {
     {
       id: 3,
       name: 'Naiteek Papriwal',
-      abhaId: '12-3456-7890-9012',
+      Id: '12-3456-7890-9012',
       age: 20,
       gender: 'Male',
       bloodGroup: 'B+',
@@ -191,7 +191,7 @@ export default function DoctorDashboard() {
     {
       id: 4,
       name: 'Meera Singh',
-      abhaId: '12-3456-7890-3456',
+      Id: '12-3456-7890-3456',
       age: 28,
       gender: 'Female',
       bloodGroup: 'AB+',
@@ -204,7 +204,7 @@ export default function DoctorDashboard() {
     {
       id: 5,
       name: 'Arjun Verma',
-      abhaId: '12-3456-7890-7890',
+      Id: '12-3456-7890-7890',
       age: 52,
       gender: 'Male',
       bloodGroup: 'A-',
@@ -309,7 +309,7 @@ export default function DoctorDashboard() {
 
   const filteredPatients = linkedPatients.filter(patient =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.abhaId.includes(searchTerm)
+    patient.Id.includes(searchTerm)
   );
 
   return (
@@ -504,7 +504,7 @@ export default function DoctorDashboard() {
                   <i className="bi bi-search"></i>
                   <input
                     type="text"
-                    placeholder="Search by name or ABHA ID..."
+                    placeholder="Search by name or ..."
                     value={searchTerm}
                     onChange={handlePatientSearch}
                   />
@@ -523,10 +523,7 @@ export default function DoctorDashboard() {
                       </div>
                     </div>
                     <div className="patient-card-body">
-                      <div className="info-row">
-                        <span className="info-label">ABHA ID:</span>
-                        <span className="info-value">{patient.abhaId}</span>
-                      </div>
+
                       <div className="info-row">
                         <span className="info-label">Last Visit:</span>
                         <span className="info-value">{new Date(patient.lastVisit).toLocaleDateString()}</span>
@@ -598,7 +595,7 @@ export default function DoctorDashboard() {
                   <i className="bi bi-search"></i>
                   <input
                     type="text"
-                    placeholder="Enter patient name, ABHA ID..."
+                    placeholder="Enter patient name, ..."
                     className="search-input-large"
                     value={apiSearchTerm}
                     onChange={(e) => setApiSearchTerm(e.target.value)}
@@ -625,10 +622,7 @@ export default function DoctorDashboard() {
                           </div>
                         </div>
                         <div className="patient-card-body">
-                          <div className="info-row">
-                            <span className="info-label">ABHA ID:</span>
-                            <span className="info-value">{patient.abhaId || 'N/A'}</span>
-                          </div>
+
                           <div className="info-row" style={{ marginTop: '15px', alignItems: 'center' }}>
                             <span className="info-label">Access Duration:</span>
                             <select 
@@ -657,7 +651,7 @@ export default function DoctorDashboard() {
                   <div className="coming-soon">
                     <i className="bi bi-search" style={{ fontSize: '80px', color: '#CDEDB3' }}></i>
                     <h3>Patient Search</h3>
-                    <p>Search for patients by ABHA ID or name to add them to your list.</p>
+                    <p>Search for patients by  or name to add them to your list.</p>
                   </div>
                 )}
               </div>
@@ -691,10 +685,7 @@ export default function DoctorDashboard() {
                     <h3><i className="bi bi-person-vcard"></i> Professional Information</h3>
                   </div>
                   <div className="info-grid">
-                    <div className="info-item">
-                      <span className="info-label">ABHA ID</span>
-                      <span className="info-value">{doctorInfo.abhaId}</span>
-                    </div>
+
                     <div className="info-item">
                       <span className="info-label">Specialization</span>
                       <span className="info-value">{doctorInfo.specialization}</span>
@@ -767,7 +758,7 @@ export default function DoctorDashboard() {
                   <div>
                     <h2>{selectedPatient.name}</h2>
                     <p className="patient-meta">{selectedPatient.gender}, {selectedPatient.age} years • Blood Group: {selectedPatient.bloodGroup}</p>
-                    <p className="patient-abha">ABHA ID: {selectedPatient.abhaId}</p>
+
                   </div>
                 </div>
                 <div className="coming-soon" style={{ marginTop: '40px' }}>
@@ -975,7 +966,7 @@ export default function DoctorDashboard() {
               </div>
               
               <div>
-                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>HPR ID (ABHA ID)</label>
+                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>HPR ID ()</label>
                 <input 
                   type="text" 
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc' }}
@@ -1077,10 +1068,7 @@ export default function DoctorDashboard() {
               background: '#ffffff', padding: '24px 28px'
             }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-                <div>
-                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '1px' }}>HPR / ABHA ID</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '14px', fontWeight: 600, color: '#1B4D1A' }}>{doctorInfo.abhaId}</p>
-                </div>
+
                 <div>
                   <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '1px' }}>Experience</p>
                   <p style={{ margin: '4px 0 0', fontSize: '14px', fontWeight: 600, color: '#1B4D1A' }}>{doctorInfo.experience}</p>
@@ -1115,7 +1103,7 @@ export default function DoctorDashboard() {
                     name: doctorInfo.name,
                     specialization: doctorInfo.specialization,
                     hospital: doctorInfo.hospital,
-                    hprId: doctorInfo.abhaId,
+                    hprId: doctorInfo.Id,
                     phone: doctorInfo.phone,
                     email: doctorInfo.email,
                     experience: doctorInfo.experience

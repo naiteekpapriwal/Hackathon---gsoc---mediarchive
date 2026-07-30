@@ -7,6 +7,7 @@ export default function PatientDashboard() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('overview');
+  const [showPatientCard, setShowPatientCard] = useState(false);
 
   // Load user data from backend (stored at login)
   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
@@ -26,10 +27,10 @@ export default function PatientDashboard() {
     navigate('/');
   };
 
-  const patientInfo = {
+  const [patientInfo, setPatientInfo] = useState({
     name: storedUser.name || 'Naiteek Papriwal',
     healthId: profile.healthId || 'HLTH001',
-    abhaId: profile.abhaId || '12-3456-7890-1234',
+    Id: profile.Id || '12-3456-7890-1234',
     aadhaar: profile.aadhaar || '1234-5678-9012',
     age: profile.age || 20,
     ageDisplay: (profile.age || 20) + ' years',
@@ -38,9 +39,21 @@ export default function PatientDashboard() {
     height: profile.height || '175 cm',
     weight: profile.weight || '65 kg',
     email: storedUser.email || 'naiteek.papriwal@gmail.com',
-    phone: storedUser.phone || '+91 98765 43210',
+    phone: profile.phone || '+91 8818944036',
+    address: profile.address || '123 Tech Park, Whitefield',
     city: profile.city || 'Bangalore',
-    state: profile.state || 'Karnataka'
+    state: profile.state || 'Karnataka',
+    emergencyContact: profile.emergencyContact || '9876543210',
+    bloodType: profile.bloodGroup || 'O+'
+  });
+
+  const handlePatientInfoChange = (e) => {
+    const { name, value } = e.target;
+    setPatientInfo(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleUpdateInfo = () => {
+    window.alert('Your profile information has been successfully updated!');
   };
 
     const [api, setApi] = useState(null);
@@ -51,8 +64,94 @@ export default function PatientDashboard() {
   const [vitals, setVitals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  const allergies = ['Penicillin', 'Peanuts'];
-  const chronicConditions = ['Type 2 Diabetes', 'Hypertension'];
+  const [allergies, setAllergies] = useState(['Penicillin', 'Peanuts']);
+  const [chronicConditions, setChronicConditions] = useState(['Type 2 Diabetes', 'Hypertension']);
+
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState([
+    { id: 1, sender: 'doctor', text: 'Hello! How are you feeling today?', time: '09:00 AM' },
+    { id: 2, sender: 'patient', text: 'Much better, doctor. The new medication is helping.', time: '09:30 AM' },
+    { id: 3, sender: 'doctor', text: 'Great to hear! Make sure to stay hydrated.', time: '09:35 AM' }
+  ]);
+  const [newChatMessage, setNewChatMessage] = useState('');
+
+  // Modal State for custom dialogs
+  const [modalState, setModalState] = useState({ isOpen: false, type: null, data: {} });
+
+  const openModal = (type) => {
+    setModalState({ isOpen: true, type, data: {} });
+  };
+  
+  const closeModal = () => {
+    setModalState({ isOpen: false, type: null, data: {} });
+  };
+
+  const handleModalChange = (e) => {
+    const { name, value } = e.target;
+    setModalState(prev => ({ ...prev, data: { ...prev.data, [name]: value } }));
+  };
+
+  const handleModalSubmit = (e) => {
+    e.preventDefault();
+    const { type, data } = modalState;
+    
+    if (type === 'allergy' && data.name) {
+      setAllergies([...allergies, data.name.trim()]);
+    } else if (type === 'condition' && data.name) {
+      setChronicConditions([...chronicConditions, data.name.trim()]);
+    } else if (type === 'appointment' && data.doctorName && data.date) {
+      const newAppt = {
+        id: Date.now().toString(),
+        date_time: `${data.date}T10:00:00Z`,
+        location: "MediVerse Virtual Clinic",
+        doctors: {
+          users: { name: data.doctorName },
+          specialization: "General Physician",
+          hospital: "MediVerse Hospital"
+        }
+      };
+      setAppointments([...appointments, newAppt]);
+    } else if (type === 'medication' && data.medName) {
+      const newMed = {
+        id: Date.now().toString(),
+        name: data.medName,
+        dosage: data.dosage || "1 tablet",
+        frequency: "Daily",
+        time: "09:00 AM",
+        taken: false
+      };
+      setMedications([...medications, newMed]);
+    }
+    
+    closeModal();
+  };
+
+  const handleSendChatMessage = (e) => {
+    e.preventDefault();
+    if (!newChatMessage.trim()) return;
+    
+    const newMsg = {
+      id: Date.now(),
+      sender: 'patient',
+      text: newChatMessage.trim(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
+    
+    setChatMessages([...chatMessages, newMsg]);
+    setNewChatMessage('');
+    
+    // Simulate doctor reply after 1.5 seconds
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, {
+        id: Date.now() + 1,
+        sender: 'doctor',
+        text: 'I have noted that down in your file. Let me know if you need anything else.',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+    }, 1500);
+  };
+
+  // The prompt functions are now handled by the custom modal submit handler
 
   useEffect(() => {
     import('../services/api').then(module => {
@@ -185,7 +284,7 @@ export default function PatientDashboard() {
           <h2>MediVerse</h2>
         </div>
 
-        <div className="sidebar-profile">
+        <div className="sidebar-profile" onClick={() => setShowPatientCard(true)} style={{ cursor: 'pointer' }}>
           <div className="profile-avatar">
             <i className="bi bi-person-fill"></i>
           </div>
@@ -265,11 +364,11 @@ export default function PatientDashboard() {
             <p className="topbar-subtitle">How are you feeling today?</p>
           </div>
           <div className="topbar-actions">
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => setActiveTab('notifications')}>
               <i className="bi bi-bell-fill"></i>
               <span className="badge">2</span>
             </button>
-            <button className="icon-btn">
+            <button className="icon-btn" onClick={() => setShowChat(!showChat)}>
               <i className="bi bi-chat-dots-fill"></i>
             </button>
           </div>
@@ -290,7 +389,12 @@ export default function PatientDashboard() {
                     <i className="bi bi-shield-exclamation"></i>
                   </div>
                   <div className="alert-content">
-                    <h3>Allergies</h3>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      Allergies
+                      <button onClick={() => openModal('allergy')} style={{ background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer', padding: 0, fontSize: '16px' }} title="Add Allergy">
+                        <i className="bi bi-plus-circle-fill"></i>
+                      </button>
+                    </h3>
                     <div className="alert-tags">
                       {allergies.map((allergy, index) => (
                         <span key={index} className="alert-tag allergy-tag">
@@ -305,7 +409,12 @@ export default function PatientDashboard() {
                     <i className="bi bi-heart-pulse-fill"></i>
                   </div>
                   <div className="alert-content">
-                    <h3>Chronic Conditions</h3>
+                    <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      Chronic Conditions
+                      <button onClick={() => openModal('condition')} style={{ background: 'none', border: 'none', color: '#f39c12', cursor: 'pointer', padding: 0, fontSize: '16px' }} title="Add Condition">
+                        <i className="bi bi-plus-circle-fill"></i>
+                      </button>
+                    </h3>
                     <div className="alert-tags">
                       {chronicConditions.map((condition, index) => (
                         <span key={index} className="alert-tag condition-tag">
@@ -433,7 +542,12 @@ export default function PatientDashboard() {
               </div>
               <div className="alerts-grid">
                 <div className="alert-box allergies">
-                  <h4>Allergies</h4>
+                  <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                    Allergies
+                    <button onClick={() => openModal('allergy')} style={{ background: 'none', border: 'none', color: '#e74c3c', cursor: 'pointer', padding: 0, fontSize: '14px' }}>
+                      <i className="bi bi-plus-circle-fill"></i>
+                    </button>
+                  </h4>
                   <div className="tags">
                     {allergies.map((allergy, index) => (
                       <span key={index} className="tag allergy-tag">{allergy}</span>
@@ -469,7 +583,7 @@ export default function PatientDashboard() {
                   value={searchTerm}
                   onChange={handleSearch}
                 />
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={() => navigate('/patient/upload-record')}>
                   <i className="bi bi-plus-circle"></i> Add Record
                 </button>
               </div>
@@ -545,7 +659,7 @@ export default function PatientDashboard() {
             <div className="dashboard-card">
               <div className="card-header">
                 <h3><i className="bi bi-calendar-check"></i> My Appointments</h3>
-                <button className="btn-primary">Schedule New</button>
+                <button className="btn-primary" onClick={() => openModal('appointment')}>Schedule New</button>
               </div>
               <div className="appointments-grid">
                 {appointments.length === 0 ? (
@@ -582,7 +696,7 @@ export default function PatientDashboard() {
             <div className="dashboard-card">
               <div className="card-header">
                 <h3><i className="bi bi-capsule"></i> My Medications</h3>
-                <button className="btn-primary">Add Medication</button>
+                <button className="btn-primary" onClick={() => openModal('medication')}>Add Medication</button>
               </div>
               <div className="medications-list-full">
                 {medications.map((med) => (
@@ -613,7 +727,7 @@ export default function PatientDashboard() {
             <div className="dashboard-card">
               <div className="card-header">
                 <h3><i className="bi bi-bell"></i> Notifications</h3>
-                <button className="text-btn">Mark all as read</button>
+
               </div>
               <div className="notifications-list">
                 <div className="notification-item unread">
@@ -656,27 +770,27 @@ export default function PatientDashboard() {
                 <div className="settings-form">
                   <div className="form-group">
                     <label>Full Name</label>
-                    <input type="text" value={patientInfo.name} readOnly />
+                    <input type="text" name="name" value={patientInfo.name} onChange={handlePatientInfoChange} />
                   </div>
                   <div className="form-group">
                     <label>Email</label>
-                    <input type="email" value={patientInfo.email} readOnly />
+                    <input type="email" name="email" value={patientInfo.email} onChange={handlePatientInfoChange} />
                   </div>
                   <div className="form-group">
                     <label>Phone</label>
-                    <input type="tel" value={patientInfo.phone} readOnly />
+                    <input type="tel" name="phone" value={patientInfo.phone} onChange={handlePatientInfoChange} />
                   </div>
                   <div className="form-row">
                     <div className="form-group">
                       <label>City</label>
-                      <input type="text" value={patientInfo.city} readOnly />
+                      <input type="text" name="city" value={patientInfo.city} onChange={handlePatientInfoChange} />
                     </div>
                     <div className="form-group">
                       <label>State</label>
-                      <input type="text" value={patientInfo.state} readOnly />
+                      <input type="text" name="state" value={patientInfo.state} onChange={handlePatientInfoChange} />
                     </div>
                   </div>
-                  <button className="btn-primary">Update Information</button>
+                  <button className="btn-primary" onClick={handleUpdateInfo}>Update Information</button>
                 </div>
               </div>
 
@@ -712,6 +826,318 @@ export default function PatientDashboard() {
           </div>
         )}
       </main>
+      {showPatientCard && (
+        <div className="modal-overlay" onClick={() => setShowPatientCard(false)} style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', zIndex: 2000,
+          backdropFilter: 'blur(6px)'
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            width: '400px', borderRadius: '24px', overflow: 'hidden',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.4)',
+            fontFamily: "'Inter', sans-serif"
+          }}>
+            {/* Card Header */}
+            <div style={{
+              background: 'linear-gradient(135deg, #184F76 0%, #2980B9 50%, #3498DB 100%)',
+              padding: '32px 28px 24px', color: 'white', position: 'relative',
+              overflow: 'hidden'
+            }}>
+              {/* Decorative circles */}
+              <div style={{
+                position: 'absolute', top: '-30px', right: '-30px',
+                width: '120px', height: '120px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.06)'
+              }}></div>
+              <div style={{
+                position: 'absolute', bottom: '-20px', left: '-20px',
+                width: '80px', height: '80px', borderRadius: '50%',
+                background: 'rgba(255,255,255,0.04)'
+              }}></div>
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px', position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <i className="bi bi-heart-pulse-fill" style={{ fontSize: '20px' }}></i>
+                  <span style={{ fontWeight: 700, fontSize: '16px', letterSpacing: '0.5px' }}>MediVerse</span>
+                </div>
+                <button onClick={() => setShowPatientCard(false)} style={{
+                  background: 'rgba(255,255,255,0.15)', border: 'none', color: 'white',
+                  width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '16px', backdropFilter: 'blur(4px)'
+                }}>&times;</button>
+              </div>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', position: 'relative', zIndex: 1 }}>
+                <div style={{
+                  width: '72px', height: '72px', borderRadius: '50%',
+                  background: 'rgba(255,255,255,0.15)', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', fontSize: '32px',
+                  border: '3px solid rgba(255,255,255,0.3)', backdropFilter: 'blur(4px)'
+                }}>
+                  <i className="bi bi-person-fill"></i>
+                </div>
+                <div>
+                  <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 700, lineHeight: 1.2 }}>{patientInfo.name}</h2>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', opacity: 0.85, fontWeight: 500 }}>Patient ID: {patientInfo.healthId}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '6px' }}>
+                    <span style={{
+                      background: 'rgba(255,255,255,0.2)', padding: '2px 10px',
+                      borderRadius: '12px', fontSize: '11px', fontWeight: 600,
+                      letterSpacing: '0.5px'
+                    }}>
+                      <i className="bi bi-patch-check-fill" style={{ marginRight: '4px' }}></i>VERIFIED PATIENT
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card Body */}
+            <div style={{
+              background: '#ffffff', padding: '24px 28px'
+            }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+
+                <div>
+                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '1px' }}>Blood Group</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '14px', fontWeight: 600, color: '#e74c3c' }}>
+                    <i className="bi bi-droplet-fill" style={{ marginRight: '4px' }}></i>
+                    {patientInfo.bloodGroup}
+                  </p>
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '1px' }}>Age / Gender</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '13px', fontWeight: 500, color: '#333' }}>{patientInfo.ageDisplay} / {patientInfo.gender}</p>
+                </div>
+                <div>
+                  <p style={{ margin: 0, fontSize: '10px', fontWeight: 600, color: '#999', textTransform: 'uppercase', letterSpacing: '1px' }}>Phone</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '13px', fontWeight: 500, color: '#333' }}>{patientInfo.phone}</p>
+                </div>
+              </div>
+
+              {/* QR Code */}
+              <div style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                background: '#f8fafb', borderRadius: '16px', padding: '20px', marginTop: '4px',
+                border: '1px solid #e8f0f5'
+              }}>
+                <p style={{ margin: '0 0 12px', fontSize: '11px', fontWeight: 600, color: '#666', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  <i className="bi bi-qr-code" style={{ marginRight: '6px' }}></i>Scan to Access Records
+                </p>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(JSON.stringify({
+                    type: 'mediarchive_patient',
+                    name: patientInfo.name,
+                    healthId: patientInfo.healthId,
+                    Id: patientInfo.Id,
+                    bloodGroup: patientInfo.bloodGroup,
+                    gender: patientInfo.gender,
+                    age: patientInfo.age,
+                    phone: patientInfo.phone
+                  }))}`}
+                  alt="Patient QR Code"
+                  style={{ width: '160px', height: '160px', borderRadius: '8px' }}
+                />
+                <p style={{ margin: '12px 0 0', fontSize: '11px', color: '#888', textAlign: 'center' }}>
+                  Doctors can scan this QR code to securely access your medical history
+                </p>
+              </div>
+            </div>
+
+            {/* Card Footer */}
+            <div style={{
+              background: '#f0f5f9', padding: '14px 28px',
+              display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px',
+              borderTop: '1px solid #e0e8ed'
+            }}>
+              <i className="bi bi-shield-fill-check" style={{ color: '#2980B9', fontSize: '13px' }}></i>
+              <span style={{ fontSize: '11px', color: '#555', fontWeight: 500 }}>Secure Health ID · MediVerse Network</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reusable Data Entry Modal */}
+      {modalState.isOpen && (
+        <div className="modal-overlay" onClick={closeModal} style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex',
+          alignItems: 'center', justifyContent: 'center', zIndex: 3000,
+          backdropFilter: 'blur(4px)'
+        }}>
+          <div onClick={(e) => e.stopPropagation()} style={{
+            background: 'white', width: '400px', borderRadius: '16px', overflow: 'hidden',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)', fontFamily: "'Inter', sans-serif"
+          }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', color: '#1B4D1A' }}>
+                {modalState.type === 'allergy' && 'Add New Allergy'}
+                {modalState.type === 'condition' && 'Add Chronic Condition'}
+                {modalState.type === 'appointment' && 'Schedule Appointment'}
+                {modalState.type === 'medication' && 'Add Medication'}
+              </h3>
+              <button onClick={closeModal} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#888' }}>&times;</button>
+            </div>
+            
+            <form onSubmit={handleModalSubmit} style={{ padding: '24px' }}>
+              {(modalState.type === 'allergy' || modalState.type === 'condition') && (
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500, color: '#444' }}>
+                    {modalState.type === 'allergy' ? 'Allergy Name' : 'Condition Name'}
+                  </label>
+                  <input 
+                    autoFocus
+                    type="text" 
+                    name="name" 
+                    required
+                    value={modalState.data.name || ''} 
+                    onChange={handleModalChange}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px' }}
+                    placeholder={modalState.type === 'allergy' ? 'e.g. Penicillin' : 'e.g. Asthma'}
+                  />
+                </div>
+              )}
+
+              {modalState.type === 'appointment' && (
+                <>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500, color: '#444' }}>Doctor's Name</label>
+                    <input 
+                      autoFocus
+                      type="text" 
+                      name="doctorName" 
+                      required
+                      value={modalState.data.doctorName || ''} 
+                      onChange={handleModalChange}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px' }}
+                      placeholder="e.g. Dr. Smith"
+                    />
+                  </div>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500, color: '#444' }}>Date</label>
+                    <input 
+                      type="date" 
+                      name="date" 
+                      required
+                      value={modalState.data.date || ''} 
+                      onChange={handleModalChange}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px' }}
+                    />
+                  </div>
+                </>
+              )}
+
+              {modalState.type === 'medication' && (
+                <>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500, color: '#444' }}>Medication Name</label>
+                    <input 
+                      autoFocus
+                      type="text" 
+                      name="medName" 
+                      required
+                      value={modalState.data.medName || ''} 
+                      onChange={handleModalChange}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px' }}
+                      placeholder="e.g. Paracetamol"
+                    />
+                  </div>
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500, color: '#444' }}>Dosage</label>
+                    <input 
+                      type="text" 
+                      name="dosage" 
+                      value={modalState.data.dosage || ''} 
+                      onChange={handleModalChange}
+                      style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '15px' }}
+                      placeholder="e.g. 500mg or 1 tablet"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+                <button type="button" onClick={closeModal} style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid #ddd', background: 'white', cursor: 'pointer', fontWeight: 500 }}>
+                  Cancel
+                </button>
+                <button type="submit" style={{ padding: '10px 20px', borderRadius: '8px', border: 'none', background: '#184F76', color: 'white', cursor: 'pointer', fontWeight: 600 }}>
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Chat Interface */}
+      {showChat && (
+        <div style={{
+          position: 'fixed', bottom: '24px', right: '24px', width: '350px',
+          height: '500px', backgroundColor: '#fff', borderRadius: '16px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.15)', display: 'flex',
+          flexDirection: 'column', overflow: 'hidden', zIndex: 1000,
+          border: '1px solid #e0e0e0', fontFamily: "'Inter', sans-serif"
+        }}>
+          {/* Chat Header */}
+          <div style={{
+            background: 'linear-gradient(135deg, #184F76 0%, #2980B9 100%)',
+            padding: '16px', color: 'white', display: 'flex', justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+                <i className="bi bi-person-fill"></i>
+              </div>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>Dr. Sarah Smith</h4>
+                <p style={{ margin: 0, fontSize: '12px', opacity: 0.8 }}>Online <span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#2ecc71', borderRadius: '50%', marginLeft: '4px' }}></span></p>
+              </div>
+            </div>
+            <button onClick={() => setShowChat(false)} style={{ background: 'none', border: 'none', color: 'white', fontSize: '20px', cursor: 'pointer' }}>
+              &times;
+            </button>
+          </div>
+
+          {/* Chat Messages */}
+          <div style={{ flex: 1, padding: '16px', overflowY: 'auto', backgroundColor: '#f8fafc', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {chatMessages.map((msg) => (
+              <div key={msg.id} style={{
+                display: 'flex', flexDirection: 'column',
+                alignItems: msg.sender === 'patient' ? 'flex-end' : 'flex-start'
+              }}>
+                <div style={{
+                  maxWidth: '80%', padding: '10px 14px', borderRadius: '12px',
+                  backgroundColor: msg.sender === 'patient' ? '#184F76' : '#fff',
+                  color: msg.sender === 'patient' ? '#fff' : '#333',
+                  boxShadow: '0 2px 5px rgba(0,0,0,0.05)', fontSize: '14px', lineHeight: 1.4,
+                  borderBottomRightRadius: msg.sender === 'patient' ? '2px' : '12px',
+                  borderBottomLeftRadius: msg.sender === 'doctor' ? '2px' : '12px',
+                  border: msg.sender === 'doctor' ? '1px solid #e2e8f0' : 'none'
+                }}>
+                  {msg.text}
+                </div>
+                <span style={{ fontSize: '10px', color: '#888', marginTop: '4px' }}>{msg.time}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Chat Input */}
+          <form onSubmit={handleSendChatMessage} style={{ padding: '14px', backgroundColor: '#fff', borderTop: '1px solid #eee', display: 'flex', gap: '8px' }}>
+            <input 
+              type="text" 
+              value={newChatMessage}
+              onChange={(e) => setNewChatMessage(e.target.value)}
+              placeholder="Type a message..."
+              style={{ flex: 1, padding: '10px 14px', borderRadius: '20px', border: '1px solid #ddd', outline: 'none', fontSize: '14px' }}
+            />
+            <button type="submit" style={{ width: '40px', height: '40px', borderRadius: '50%', border: 'none', backgroundColor: '#184F76', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <i className="bi bi-send-fill"></i>
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

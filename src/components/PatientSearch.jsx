@@ -14,7 +14,7 @@ export default function PatientSearch({ onPatientSelect }) {
     {
       id: 1,
       name: 'Aarav Sharma',
-      abhaId: '12-3456-7890-1234',
+      Id: '12-3456-7890-1234',
       age: 45,
       gender: 'Male',
       lastVisit: '14 Aug 2023'
@@ -22,7 +22,7 @@ export default function PatientSearch({ onPatientSelect }) {
     {
       id: 2,
       name: 'Priya Patel',
-      abhaId: '12-3456-7890-5678',
+      Id: '12-3456-7890-5678',
       age: 32,
       gender: 'Female',
       lastVisit: '02 Jan 2024'
@@ -30,7 +30,7 @@ export default function PatientSearch({ onPatientSelect }) {
     {
       id: 3,
       name: 'Naiteek Papriwal',
-      abhaId: '12-3456-7890-9101',
+      Id: '12-3456-7890-9101',
       age: 20,
       gender: 'Male',
       lastVisit: '22 Jul 2023'
@@ -43,7 +43,7 @@ export default function PatientSearch({ onPatientSelect }) {
     e.preventDefault();
     const results = mockPatients.filter(patient =>
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.abhaId.includes(searchTerm)
+      patient.Id.includes(searchTerm)
     );
     setSearchResults(results);
   };
@@ -99,7 +99,7 @@ export default function PatientSearch({ onPatientSelect }) {
     }
 
     // Simulate verification
-    alert(`Access Granted!\n\nPatient: Aarav Sharma\nABHA ID: 12-3456-7890-1234\nAccess Duration: 3 Days\n\nYou can now view this patient's medical records.`);
+    alert(`Access Granted!\n\nPatient: Aarav Sharma\n: 12-3456-7890-1234\nAccess Duration: 3 Days\n\nYou can now view this patient's medical records.`);
 
     // Simulate patient access granted
     if (onPatientSelect) {
@@ -113,7 +113,7 @@ export default function PatientSearch({ onPatientSelect }) {
 
   const handlePatientClick = (patient) => {
     const hasAccess = window.confirm(
-      `Request Access to ${patient.name}'s Records?\n\nABHA ID: ${patient.abhaId}\n\nPatient must approve your access request.`
+      `Request Access to ${patient.name}'s Records?\n\n: ${patient.Id}\n\nPatient must approve your access request.`
     );
 
     if (hasAccess && onPatientSelect) {
@@ -125,7 +125,7 @@ export default function PatientSearch({ onPatientSelect }) {
     <div className="patient-search">
       <div className="search-header">
         <h2>Search Patient</h2>
-        <p className="search-subtitle">Find patients by ABHA ID, name, or scan QR code for instant access</p>
+        <p className="search-subtitle">Find patients by , name, or scan QR code for instant access</p>
       </div>
 
       {/* Search Method Tabs */}
@@ -169,7 +169,7 @@ export default function PatientSearch({ onPatientSelect }) {
               <input
                 type="text"
                 className="search-input"
-                placeholder="Search by patient name or ABHA ID..."
+                placeholder="Search by patient name or ..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -192,7 +192,7 @@ export default function PatientSearch({ onPatientSelect }) {
                     </div>
                     <div className="patient-info">
                       <h4>{patient.name}</h4>
-                      <p className="abha-id">ABHA ID: {patient.abhaId}</p>
+
                       <div className="patient-meta">
                         <span>{patient.gender}, {patient.age}y</span>
                         <span className="separator">•</span>
@@ -217,7 +217,7 @@ export default function PatientSearch({ onPatientSelect }) {
                 <path d="M21 21l-4.35-4.35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <p>No patients found</p>
-              <span>Try searching with a different ABHA ID or name</span>
+              <span>Try searching with a different  or name</span>
             </div>
           )}
         </div>

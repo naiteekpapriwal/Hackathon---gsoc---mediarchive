@@ -22,7 +22,7 @@ CREATE TABLE users (
 CREATE TABLE patients (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-    abha_id VARCHAR(100) UNIQUE,
+    _id VARCHAR(100) UNIQUE,
     health_id VARCHAR(100) UNIQUE,
     aadhaar VARCHAR(100),
     age INTEGER,

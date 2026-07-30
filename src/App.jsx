@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import PatientDashboard from './components/PatientDashboard';
 import DoctorDashboard from './components/DoctorDashboard';
+import UploadRecord from './components/UploadRecord';
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/register/doctor" element={<RegisterPage userType="doctor" />} />
           <Route path="/patient/dashboard" element={<PatientDashboard />} />
           <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+          <Route path="/patient/upload-record" element={<UploadRecord />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

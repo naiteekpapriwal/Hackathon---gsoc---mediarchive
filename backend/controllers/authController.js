@@ -60,7 +60,7 @@ exports.login = async (req, res, next) => {
 // Register Patient
 exports.registerPatient = async (req, res, next) => {
     try {
-        const { name, email, password, phone, abhaId, aadhaar, age, gender, bloodGroup, height, weight, city, state } = req.body;
+        const { name, email, password, phone, Id, aadhaar, age, gender, bloodGroup, height, weight, city, state } = req.body;
 
         // Check if user exists
         const { data: existingUser } = await supabase.from('users').select('*').eq('email', email).maybeSingle();
@@ -88,7 +88,7 @@ exports.registerPatient = async (req, res, next) => {
         // Create patient profile
         const { data: patient, error: patientError } = await supabase.from('patients').insert({
             user_id: user.id,
-            abha_id: abhaId,
+            _id: Id,
             health_id: healthId,
             aadhaar,
             age,
@@ -294,7 +294,7 @@ exports.verifyAadhaar = async (req, res, next) => {
             res.json({
                 verified: true,
                 message: 'Aadhaar verified successfully.',
-                abhaId: `${aadhaarNumber.substring(0, 2)}-${Date.now().toString().substring(5)}-${Math.floor(1000 + Math.random() * 9000)}`
+                Id: `${aadhaarNumber.substring(0, 2)}-${Date.now().toString().substring(5)}-${Math.floor(1000 + Math.random() * 9000)}`
             });
         } else {
             res.status(400).json({ verified: false, message: 'Invalid OTP.' });

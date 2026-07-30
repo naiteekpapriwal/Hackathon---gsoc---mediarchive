@@ -47,11 +47,11 @@ exports.searchPatient = async (req, res, next) => {
         if (!q) return res.status(400).json({ message: 'Search query is required.' });
 
         // Since ilike with OR is complex in JS SDK, we do two queries or an advanced RPC, but for simplicity:
-        // We can do: or('abha_id.ilike.%q%, health_id.ilike.%q%') on patients
-        const { data: patientsByAbha } = await supabase.from('patients').select(`
+        // We can do: or('_id.ilike.%q%, health_id.ilike.%q%') on patients
+        const { data: patientsBy } = await supabase.from('patients').select(`
             *,
             users ( name, email, phone )
-        `).or(`abha_id.ilike.%${q}%,health_id.ilike.%${q}%`);
+        `).or(`_id.ilike.%${q}%,health_id.ilike.%${q}%`);
 
         // Search by user name
         const { data: usersByName } = await supabase.from('users').select('id, name, email, phone').ilike('name', `%${q}%`).eq('role', 'patient');
@@ -64,14 +64,14 @@ exports.searchPatient = async (req, res, next) => {
         }
 
         const allPatientsMap = new Map();
-        [...(patientsByAbha || []), ...patientsByName].forEach(p => {
+        [...(patientsBy || []), ...patientsByName].forEach(p => {
             allPatientsMap.set(p.id, p);
         });
 
         const formattedPatients = Array.from(allPatientsMap.values()).map(p => ({
             id: p.id,
             name: p.users?.name || 'Unknown',
-            abhaId: p.abha_id,
+            Id: p._id,
             age: p.age,
             gender: p.gender,
             bloodGroup: p.blood_group,
@@ -183,7 +183,7 @@ exports.getLinkedPatients = async (req, res, next) => {
             return {
                 id: p.id,
                 name: p.users?.name || 'Unknown',
-                abhaId: p.abha_id,
+                Id: p._id,
                 age: p.age,
                 gender: p.gender,
                 bloodGroup: p.blood_group,

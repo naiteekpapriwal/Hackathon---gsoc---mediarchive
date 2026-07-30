@@ -109,7 +109,7 @@ const seedDatabase = async () => {
 
         const patient1 = await Patient.create({
             user: patientUser._id,
-            abhaId: '12-3456-7890-1234',
+
             healthId: 'HLTH001',
             aadhaar: '1234-5678-9012',
             age: 20,
@@ -125,7 +125,7 @@ const seedDatabase = async () => {
 
         const patient2 = await Patient.create({
             user: patientUser2._id,
-            abhaId: '12-3456-7890-5678',
+
             healthId: 'HLTH002',
             age: 45,
             gender: 'Male',
@@ -137,7 +137,7 @@ const seedDatabase = async () => {
 
         const patient3 = await Patient.create({
             user: patientUser3._id,
-            abhaId: '12-3456-7890-9012',
+
             healthId: 'HLTH003',
             age: 32,
             gender: 'Female',
@@ -149,7 +149,7 @@ const seedDatabase = async () => {
 
         const patient4 = await Patient.create({
             user: patientUser4._id,
-            abhaId: '12-3456-7890-3456',
+
             healthId: 'HLTH004',
             age: 28,
             gender: 'Female',
@@ -161,7 +161,7 @@ const seedDatabase = async () => {
 
         const patient5 = await Patient.create({
             user: patientUser5._id,
-            abhaId: '12-3456-7890-7890',
+
             healthId: 'HLTH005',
             age: 52,
             gender: 'Male',

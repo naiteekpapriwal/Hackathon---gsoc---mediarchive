@@ -4,7 +4,7 @@
   
   ### One Digital Health Record for Everyone, Accessible Everywhere
   
-  *India's unified health data system linking patients, doctors, and hospitals through secure Health ID (ABHA) and HPR ID.*
+  *India's unified health data system linking patients, doctors, and hospitals through secure Health ID () and HPR ID.*
 
   [![Live Demo](https://img.shields.io/badge/Live-Demo-2A6F28?style=for-the-badge)](https://mediverse.vercel.app)
   [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
@@ -16,7 +16,7 @@
 
 ### 🔐 Authentication System
 - **Dual Role Login**: Separate authentication for patients and doctors
-- **ABHA ID Integration**: Health ID / ABHA ID for patients (Ayushman Bharat Health Account)
+- ** Integration**: Health ID /  for patients (Ayushman Bharat Health Account)
 - **HPR ID Support**: Doctor ID / HPR ID for healthcare professionals (Health Professional Registry)
 - **Secure Access**: Role-based access control
 

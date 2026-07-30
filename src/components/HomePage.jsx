@@ -102,7 +102,7 @@ const HomePage = () => {
               <i className="bi bi-database-check"></i>
             </div>
             <div className="stat-number">42 Cr+</div>
-            <div className="stat-label">ABHA Records Created</div>
+            <div className="stat-label"> Records Created</div>
             <p className="stat-description">Health records linked under Ayushman Bharat Digital Mission</p>
           </div>
         </div>
@@ -201,7 +201,7 @@ const HomePage = () => {
             <div className="step-card scroll-animate">
               <div className="step-number">01</div>
               <div className="step-icon"><i className="bi bi-card-heading"></i></div>
-              <h3>Create / Link Your ABHA</h3>
+              <h3>Create / Link Your </h3>
               <p>Sign up with Aadhaar and link your Ayushman Bharat Health Account for a single longitudinal timeline</p>
             </div>
             <div className="step-card scroll-animate">
@@ -234,7 +234,7 @@ const HomePage = () => {
             <div className="faq-item scroll-animate">
               <details open={activeIndex === 1} onClick={() => toggleFAQ(1)}>
                 <summary>How do I link my existing hospital records?</summary>
-                <p>Connect your ABHA ID during signup. Any hospital already sharing digital records to the Ayushman Bharat ecosystem will automatically appear in your timeline.</p>
+                <p>Connect your  during signup. Any hospital already sharing digital records to the Ayushman Bharat ecosystem will automatically appear in your timeline.</p>
               </details>
             </div>
             <div className="faq-item scroll-animate">
@@ -246,7 +246,7 @@ const HomePage = () => {
             <div className="faq-item scroll-animate">
               <details open={activeIndex === 3} onClick={() => toggleFAQ(3)}>
                 <summary>Does this work with my telemedicine app?</summary>
-                <p>Yes. We integrate with major telemedicine platforms and hospital EMR systems that support ABHA/ABDM standards.</p>
+                <p>Yes. We integrate with major telemedicine platforms and hospital EMR systems that support /ABDM standards.</p>
               </details>
             </div>
             <div className="faq-item scroll-animate">
@@ -284,7 +284,7 @@ const HomePage = () => {
             <div className="footer-col">
               <h4>Patients</h4>
               <a href="/patient/login">Login</a>
-              <a href="/abha">ABHA Integration</a>
+              <a href="/"> Integration</a>
               <a href="/emergency">Emergency Access</a>
             </div>
             <div className="footer-col">
