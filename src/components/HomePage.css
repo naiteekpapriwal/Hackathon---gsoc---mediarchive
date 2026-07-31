@@ -1662,7 +1662,7 @@ body {
   
   /* Mesmerizing Balanced Fade Background */
   background-image: 
-    linear-gradient(rgba(245, 238, 221, 0.75), rgba(245, 238, 221, 0.75)),
+    linear-gradient(rgba(245, 238, 221, 0.50), rgba(245, 238, 221, 0.50)),
     url('../assets/image.png');
   background-position: center center;
   background-size: cover;
