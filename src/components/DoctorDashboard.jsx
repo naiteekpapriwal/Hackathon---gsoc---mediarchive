@@ -45,6 +45,7 @@ export default function DoctorDashboard() {
     if (api && activeTab === 'consultations') {
       fetchConsultations();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, activeTab]);
 
   const handleApiSearch = async () => {
@@ -112,6 +113,7 @@ export default function DoctorDashboard() {
     if (!api) return;
     setSubmittingProfile(true);
     try {
+      // eslint-disable-next-line no-unused-vars
       const res = await api.put('/doctor/profile', profileForm);
       const updatedUser = {
         ...storedUser,

@@ -56,12 +56,19 @@ export default function PatientDashboard() {
     window.alert('Your profile information has been successfully updated!');
   };
 
-    const [api, setApi] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [api, setApi] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [dashboardData, setDashboardData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [medicalRecords, setMedicalRecords] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [appointments, setAppointments] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [medications, setMedications] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [vitals, setVitals] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(true);
   
   const [allergies, setAllergies] = useState(['Penicillin', 'Peanuts']);

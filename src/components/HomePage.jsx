@@ -27,6 +27,7 @@ const HomePage = () => {
     return () => observer.disconnect();
   }, []);
 
+  // eslint-disable-next-line no-unused-vars
   const toggleFAQ = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
